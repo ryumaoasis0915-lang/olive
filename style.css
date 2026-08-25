@@ -8,6 +8,7 @@
   --line:rgba(18,36,57,0.12); --line-strong:rgba(18,36,57,0.24);
   --card:#ffffff;
   --shadow:0 18px 40px -24px rgba(14,67,114,0.28);
+  --rock:#d6e5f2; --rock-2:#bed4e7; --rock-line:#a6c1d7; --bark:#7d7159; --bark-2:#584f3e; --bark-3:#94886d;
   --serif:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   --sans:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
 }
@@ -19,7 +20,8 @@
     --sea-pale:#132c40; --sea-deep:#061523;
     --olive:#a9c374; --olive-deep:#c3d998; --olive-light:#7c9a4a; --olive-pale:#1f2a1a;
     --line:rgba(231,240,247,0.14); --line-strong:rgba(231,240,247,0.26);
-    --card:#0f2130; --shadow:0 18px 44px -22px rgba(0,0,0,0.65);
+      --rock:#17293a; --rock-2:#0e1e2c; --rock-line:#2a4459; --bark:#8b7d61; --bark-2:#635a45; --bark-3:#a2957a;
+  --card:#0f2130; --shadow:0 18px 44px -22px rgba(0,0,0,0.65);
   }
 }
 :root[data-theme="dark"]{
@@ -29,6 +31,7 @@
   --sea-pale:#132c40; --sea-deep:#061523;
   --olive:#a9c374; --olive-deep:#c3d998; --olive-light:#7c9a4a; --olive-pale:#1f2a1a;
   --line:rgba(231,240,247,0.14); --line-strong:rgba(231,240,247,0.26);
+    --rock:#17293a; --rock-2:#0e1e2c; --rock-line:#2a4459; --bark:#8b7d61; --bark-2:#635a45; --bark-3:#a2957a;
   --card:#0f2130; --shadow:0 18px 44px -22px rgba(0,0,0,0.65);
 }
 
@@ -138,9 +141,9 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--olive); outline-o
 
 .hero{ position:relative; padding:clamp(56px,8.5vw,100px) 0 clamp(64px,8vw,96px); overflow:hidden; border-bottom:1px solid var(--line); }
 .hero-glow{ position:absolute; inset:0; pointer-events:none; z-index:0; background:radial-gradient(560px circle at var(--mx,60%) var(--my,20%), rgba(127,163,62,.16), transparent 62%); transition:background .15s ease; }
-.hero-grid{ display:grid; grid-template-columns:1.12fr .88fr; gap:clamp(30px,5vw,64px); align-items:center; position:relative; z-index:1; }
+.hero-grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:clamp(30px,5vw,64px); align-items:center; position:relative; z-index:1; }
 @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
-.hero h1{ font-size:clamp(2.1rem,4.6vw,3.5rem); margin-top:16px; }
+.hero h1{ font-size:clamp(1.95rem,4.05vw,3.05rem); margin-top:16px; }
 .hero h1 em{ font-style:normal; color:var(--olive-deep); }
 .hero-lede{ margin-top:20px; font-size:1.02rem; color:var(--ink-soft); max-width:50ch; }
 .hero-formal{ margin-top:24px; font-size:.81rem; color:var(--ink-soft); border-left:2px solid var(--olive); padding-left:14px; line-height:1.9; }
@@ -545,3 +548,52 @@ footer .f-note{ opacity:.8; }
 
 /* 日本語の折り返しを文節単位に */
 .hero-lede, .ph-lede, .section-head p, .step3 p, .gate p, .panel-card .say, .benefit p, .trivia-card .tx, .eco-card p, .init p, .ask p{ word-break:auto-phrase; line-break:strict; }
+
+/* ===== bridging branch grows across the chasm ===== */
+.bridge-art svg{ overflow:visible; }
+.bridge-grow{ transform-box:view-box; transform-origin:200px 160px; transform:scaleX(.04); opacity:.35; transition:transform 1.5s cubic-bezier(.25,.8,.25,1), opacity .9s ease; }
+.draw.in .bridge-grow{ transform:scaleX(1); opacity:1; }
+@media (prefers-reduced-motion: reduce){ .bridge-grow{ transform:none; opacity:1; transition:none; } }
+.no-js .bridge-grow{ transform:none; opacity:1; }
+
+/* ===== hero title: line-by-line mask reveal ===== */
+.hero-title .ln{ display:block; overflow:hidden; padding-bottom:.14em; margin-bottom:-.14em; }
+.hero-title .ln > span{ display:block; transform:translateY(106%); animation:lineUp 1s cubic-bezier(.2,.85,.25,1) forwards; }
+.hero-title .ln:nth-child(1) > span{ animation-delay:.18s; }
+.hero-title .ln:nth-child(2) > span{ animation-delay:.32s; }
+@keyframes lineUp{ to{ transform:none; } }
+@media (prefers-reduced-motion: reduce){ .hero-title .ln > span{ transform:none; animation:none; } }
+
+/* ===== anchor offset under the sticky header ===== */
+section, [id]{ scroll-margin-top:86px; }
+
+/* ===== print ===== */
+@media print{
+  header.site, .back-to-top, #scrollProgress, .marquee, .pager, .scroll-cue, .hero-aurora, .hero-glow{ display:none !important; }
+  body{ background:#fff !important; color:#000; }
+  .reveal,.stagger>*,.wipe,.fade-late,.page-enter>*{ opacity:1 !important; transform:none !important; clip-path:none !important; }
+  section{ page-break-inside:avoid; border:none; }
+  a{ text-decoration:none; color:#000; }
+}
+
+/* ===== drifting olive leaves in the hero ===== */
+.leaf-fall{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+.leaf-fall i{
+  position:absolute; top:-8%; display:block; width:18px; height:7px; border-radius:60% 12% 60% 12%;
+  background:var(--olive); opacity:0; transform-origin:center;
+  animation:leafDrift linear infinite;
+}
+.leaf-fall i:nth-child(1){ left:12%; animation-duration:19s; animation-delay:0s;   background:var(--olive-light); }
+.leaf-fall i:nth-child(2){ left:31%; animation-duration:24s; animation-delay:-6s;  width:14px; height:6px; }
+.leaf-fall i:nth-child(3){ left:54%; animation-duration:21s; animation-delay:-12s; background:var(--olive-deep); }
+.leaf-fall i:nth-child(4){ left:73%; animation-duration:27s; animation-delay:-3s;  width:16px; height:6px; background:var(--olive-light); }
+.leaf-fall i:nth-child(5){ left:88%; animation-duration:23s; animation-delay:-16s; width:13px; height:5px; }
+@keyframes leafDrift{
+  0%   { opacity:0;   transform:translate3d(0,0,0) rotate(0deg); }
+  8%   { opacity:.5; }
+  50%  { transform:translate3d(-46px,52vh,0) rotate(220deg); }
+  85%  { opacity:.42; }
+  100% { opacity:0;   transform:translate3d(28px,108vh,0) rotate(430deg); }
+}
+@media (prefers-reduced-motion: reduce){ .leaf-fall{ display:none; } }
+@media (max-width:760px){ .leaf-fall i:nth-child(n+4){ display:none; } }

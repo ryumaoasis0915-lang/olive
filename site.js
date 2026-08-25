@@ -2,12 +2,39 @@
 var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 (function(){
-  var els = document.querySelectorAll('.reveal, .stagger, .draw, .wipe');
-  if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('in'); }); return; }
-  var io = new IntersectionObserver(function(en){
-    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold:0.1, rootMargin:'0px 0px -40px 0px' });
-  els.forEach(function(e){ io.observe(e); });
+  var els = [].slice.call(document.querySelectorAll('.reveal, .stagger, .draw, .wipe'));
+  if(!els.length) return;
+
+  function showAll(){ els.forEach(function(e){ e.classList.add('in'); }); els = []; }
+  if(REDUCE){ showAll(); return; }
+
+  var ticking = false;
+  function check(){
+    ticking = false;
+    if(!els.length) return;
+    var trigger = window.innerHeight * 0.94;
+    var remaining = [];
+    for(var i = 0; i < els.length; i++){
+      var el = els[i];
+      var r = el.getBoundingClientRect();
+      if(r.top < trigger){
+        // already scrolled past -> reveal instantly, no transition
+        if(r.bottom < 0) el.classList.add('in-fast');
+        el.classList.add('in');
+      } else remaining.push(el);
+    }
+    els = remaining;
+  }
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(check); } }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', check);
+  window.addEventListener('pageshow', check);
+  check();
+  // fail-safe: nothing may stay invisible
+  setTimeout(check, 400);
+  setTimeout(showAll, 6000);
 })();
 
 (function(){
@@ -169,4 +196,18 @@ var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setTimeout(function(){ window.location.href = href; }, 240);
   });
   window.addEventListener('pageshow', function(){ document.body.classList.remove('leaving'); });
+})();
+
+/* ---- ecosystem card <-> ring node linking ---- */
+(function(){
+  var cards = document.querySelectorAll('.eco-card[data-stage]');
+  if(!cards.length) return;
+  cards.forEach(function(card){
+    var node = document.getElementById('eco-n' + card.getAttribute('data-stage'));
+    if(!node) return;
+    card.addEventListener('mouseenter', function(){ node.classList.add('hot'); });
+    card.addEventListener('mouseleave', function(){ node.classList.remove('hot'); });
+    card.addEventListener('focusin',  function(){ node.classList.add('hot'); });
+    card.addEventListener('focusout', function(){ node.classList.remove('hot'); });
+  });
 })();

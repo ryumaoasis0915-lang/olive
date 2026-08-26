@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.remove("no-js");</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 34C20 34 8 28 8 16C8 9 13 4 20 4C27 4 32 9 32 16C32 28 20 34 20 34Z' fill='none' stroke='%234f6329' stroke-width='2.6'/%3E%3Cpath d='M20 34V10' stroke='%234f6329' stroke-width='2.6'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#0a5ba8">
 <meta property="og:type" content="website">
@@ -72,10 +73,11 @@
   <section class="hero" id="heroSection" style="padding-top:clamp(52px,8vw,92px);">
     <div class="hero-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+    <div class="leaf-fall" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="wrap hero-grid">
       <div class="page-enter">
         <p class="eyebrow">Okayama Local Innovation and Visionary Ecosystem</p>
-        <h1>未来を待つのではなく、<br><em>私たちが、創る。</em></h1>
+        <h1 class="hero-title"><span class="ln"><span>未来を待つのではなく、</span></span><span class="ln"><span><em>私たちが、創る。</em></span></span></h1>
         <p class="hero-lede">岡山の高校・大学・企業・行政・金融・メディアが、ひとつのテーブルにつく。そして決めたことを、実際に動かす。OLIVEは、岡山の人材育成を「話し合い」で終わらせないための、産学官金言のプラットフォームです。</p>
         <p class="hero-formal">文部科学省「地域構想推進プラットフォーム」構築等推進事業　採択取組</p>
         <div class="hero-cta">
@@ -108,6 +110,7 @@
 </svg></div>
       </div>
     </div>
+    <div class="scroll-cue" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
   <div class="marquee" aria-hidden="true"><div class="marquee-track">
@@ -148,7 +151,7 @@
 
   <section id="photo-kodai" style="padding-top:0; border-bottom:none;">
     <div class="wrap">
-      <figure class="photo-band reveal wipe"><img src="kodai-workshop.jpg" alt="高校生と大学生・大学職員が付箋を使って岡山の地域課題を話し合っている様子" loading="lazy"><figcaption>高校生と大学生が同じテーブルで、岡山の地域課題を 描く。<span class="cap-note">※ 本画像は活動のイメージです。</span></figcaption></figure>
+      <figure class="photo-band reveal wipe"><img src="kodai-workshop.jpg" alt="高校生と大学生・大学職員が付箋を使って岡山の地域課題を話し合っている様子" loading="lazy" decoding="async" width="1600" height="893"><figcaption>高校生と大学生が同じテーブルで、岡山の地域未来を描く。<span class="cap-note">※ 本画像は活動のイメージです。</span></figcaption></figure>
     </div>
   </section>
 
@@ -220,11 +223,8 @@
         <p class="eyebrow">新着</p>
         <h2>お知らせ</h2>
       </div>
-      <div class="news-list stagger">
-        <a class="news-item" href="news.html"><span class="date">2026.08</span><span class="news-title">参画候補機関向け説明資料「OLIVE全体構想」を公開しました。</span><span class="tag">資料公開</span></a>
-        <a class="news-item" href="news.html"><span class="date">2026.07.31</span><span class="news-title">定例記者会見にて「おかやま地域未来共創プラットフォーム」構想を発表しました。</span><span class="tag">記者発表</span></a>
-        <a class="news-item" href="news.html"><span class="date">2026.07.22</span><span class="news-title">文部科学省「地域構想推進プラットフォーム」構築等推進事業に採択されました。</span><span class="tag">採択</span></a>
-      </div>
+      <div class="news-list stagger" id="newsList" data-limit="3"></div>
+      <noscript><p style="padding:18px 0; color:var(--ink-soft); font-size:.9rem;">お知らせの一覧を表示するにはJavaScriptを有効にしてください。</p></noscript>
       <div style="margin-top:26px;"><a class="btn btn-ghost" href="news.html">お知らせ一覧へ</a></div>
     </div>
   </section>
@@ -236,9 +236,11 @@
 <footer>
   <span>© 2026 おかやま地域未来共創プラットフォーム（OLIVE）</span>
   <span class="fnav"><a href="index.html">ホーム</a> <a href="about.html">OLIVEとは</a> <a href="stakeholders.html">あなたにとって</a> <a href="issue.html">岡山のいま</a> <a href="members.html">メンバー</a> <a href="initiatives.html">4つの取組</a> <a href="roadmap.html">これから</a> <a href="news.html">お知らせ</a> <a href="contact.html">お問い合わせ</a></span>
-  <span>本サイトは参画候補機関向け説明資料に基づく準備版です。組織構成・数値は令和8年8月時点の想定です。</span>
+  <span class="f-note">本サイトは参画候補機関向け説明資料に基づく準備版です。組織構成・数値は令和8年8月時点の想定です。</span>
 </footer>
 <button class="back-to-top" id="backToTop" aria-label="ページ上部へ戻る">↑</button>
+<script src="news.js"></script>
 <script src="site.js"></script>
+
 </body>
 </html>
